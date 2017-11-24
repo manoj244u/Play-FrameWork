@@ -1,0 +1,6 @@
+
+POST    /signup                      demo.DemoController.createUser()
+POST    /login                 demo.DemoController.loginUser()
+POST    /blog                  demo.BlogController.createBlog()
+GET     /open/:userId           demo.BlogController.viewBlog(userId: String)
+# GET     /login/:email/:pass               demo.DemoController.login(email : String, pass : String)
