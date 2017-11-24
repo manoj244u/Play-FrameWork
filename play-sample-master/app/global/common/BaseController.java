@@ -5,21 +5,35 @@ import play.data.validation.ValidationError;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import session.SessionModel;
+import session.SessionRepository;
+import session.SessionService;
+
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 public class BaseController extends Controller {
 
     @Inject
     protected FormFactory formFactory;
 
-    public Result index(){
-        return ok("application is running");
+    @Inject
+    public SessionService sessionService;
+
+    public boolean isSessionValid() {
+
+        Optional<String> optionalToken = request().getHeaders().get("x-session-token");
+
+        return optionalToken.isPresent() && sessionService.isSessionExists(optionalToken.get());
     }
 
+
+    public Result index() {
+        return ok("application is running");
+    }
 
     public Result success(Response response) {
         return ok(Json.toJson(response));

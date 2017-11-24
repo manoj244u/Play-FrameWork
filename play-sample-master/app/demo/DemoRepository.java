@@ -20,4 +20,5 @@ public interface DemoRepository {
    /* DemoModel getUser(ObjectId userIdstr);*/
     DemoModel loginUser(DemoModel loginuser);
     DemoModel createUser(DemoModel newUser);
+    DemoModel getUserByEmail(String email);
 }

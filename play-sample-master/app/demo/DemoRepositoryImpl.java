@@ -4,6 +4,7 @@ package demo;
 import global.common.BaseModel;
 import global.common.BaseRepository;
 import global.configuration.db.mongodb.MongoDBConnection;
+import org.bson.types.ObjectId;
 import user.UserModel;
 import user.UserRepository;
 
@@ -55,6 +56,14 @@ public class DemoRepositoryImpl extends BaseRepository<DemoModel> implements Dem
         }
         return null;
 
+    }
+
+    @Override
+    public DemoModel getUserByEmail(String email) {
+        return query()
+                .field(DemoModel.Fields.email.name())
+                .equal(email)
+                .get();
     }
 
     @Override

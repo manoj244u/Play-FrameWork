@@ -30,7 +30,7 @@ public class BlogService {
         newBlog.setUserId(blogForm.userId);
         newBlog.setTitle(blogForm.getTitle());
         newBlog.setBlogDesc(blogForm.getBlogDesc());
-        newBlog.setComments(blogForm.getComments());
+       // newBlog.setCommnets(blogForm.getComments());
         newBlog.setLike(0);
         return repository.createBlog(newBlog);
     }

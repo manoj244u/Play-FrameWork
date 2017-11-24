@@ -3,18 +3,13 @@ package demo;
 import com.google.common.collect.ImmutableMap;
 import global.common.BaseController;
 import global.exceptions.CustomException;
-import jdk.nashorn.internal.ir.annotations.Immutable;
-import org.bson.types.ObjectId;
 import play.data.Form;
-import play.data.FormFactory;
 import play.mvc.BodyParser;
 import play.mvc.Result;
 
-import user.UserService;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.rmi.server.ObjID;
+import java.util.Optional;
 
 
 @Singleton
@@ -69,7 +64,7 @@ public final class DemoController extends BaseController {
 
 
 
-    @BodyParser.Of(BodyParser.Json.class)
+   /* @BodyParser.Of(BodyParser.Json.class)
     public Result loginUser() {
         try {
             final Form<loginRequestForm> loginModelForm = formFactory.form(loginRequestForm.class).bindFromRequest();
@@ -84,6 +79,33 @@ public final class DemoController extends BaseController {
             return failure(e.getMessage());
 
         }
+    }*/
+
+    public Result loginUser() {
+        try {
+
+            final Form<loginRequestForm> loginModelForm = formFactory.form(loginRequestForm.class).bindFromRequest();
+            final loginRequestForm loginForm = loginModelForm.get();
+            Optional<DemoModel> demo = this.demoService.loginUser(loginForm);
+            if (demo.isPresent()) {
+                DemoModel demoModel = demo.get();
+                String session = sessionService.generateSession();
+                boolean status = sessionService.assignSessionToUser(demoModel.getId(), session,loginForm);
+
+                return status ? success("successfully login", ImmutableMap.of("session", session)) : failure("failed to login");
+            } else {
+                return failure("Invalid Login credentials");
+            }
+
+        } catch (CustomException e) {
+            return failure(e.getMessage());
+        }
     }
+
+    public Result logoutUser(String sessionToken) {
+        boolean status = this.sessionService.deleteSession(sessionToken);
+        return status ? success("You've been successfully logged out") : failure("not logout");
+    }
+
 }
 

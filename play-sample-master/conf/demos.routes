@@ -5,5 +5,5 @@ POST    /blog                               demo.BlogController.createBlog()
 DELETE  /deleteblog/:userIdStr              demo.BlogController.deleteBlog(userIdStr: String)
 GET     /view/:userIdStr                    demo.BlogController.viewBlog(userIdStr: String)
 PUT     /update/:userIdStr                  demo.BlogController.updateBlog(userIdStr: String)
-POST    /commnet/:userIdStr
+#POST    /commnet/:userIdStr
 # GET   /login/:email/:pass                 demo.DemoController.login(email : String, pass : String)
