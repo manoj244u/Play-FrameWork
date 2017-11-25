@@ -1,12 +1,11 @@
 import com.google.inject.AbstractModule;
-import demo.BlogRepository;
-import demo.BlogRepositoryImpl;
+import blog.BlogRepository;
+import blog.BlogRepositoryImpl;
 import global.configuration.db.mongodb.MongoDBConnection;
 import user.UserRepository;
 import user.UserRepositoryImpl;
 import demo.DemoRepository;
 import demo.DemoRepositoryImpl;
-import user.UserService;
 
 /**
  * This class is a Guice module that tells Guice how to bind several

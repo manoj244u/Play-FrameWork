@@ -1,4 +1,4 @@
-package demo;
+package blog;
 
 import global.common.BaseRepository;
 import global.configuration.db.mongodb.MongoDBConnection;
@@ -21,6 +21,20 @@ public class BlogRepositoryImpl extends BaseRepository<BlogModel> implements Blo
     public BlogModel createBlog(BlogModel newBlog) {
         create(newBlog);
         return newBlog;
+    }
+
+    @Override
+    public BlogModel postComments(BlogModel newCommetns) {
+        BlogModel blog = query()
+                .field(BlogModel.Fields.topic.name())
+                .equal(newCommetns.getTopic())
+                .get();
+        if (blog != null) {
+        create(newCommetns);
+        return newCommetns;
+    }
+        return null;
+
     }
 
     @Override
@@ -51,6 +65,28 @@ public class BlogRepositoryImpl extends BaseRepository<BlogModel> implements Blo
             return blog;
         }*/
     }
+    @Override
+    public List<String> viewComments(String topic) {
+
+        List<BlogModel> model= query()
+                .field(BlogModel.Fields.topic.name())
+                .equal(topic)
+                .asList();
+         List<String> comments=new ArrayList<String>();
+        for(BlogModel b1 : model){
+            comments.add(b1.getComments());
+
+        }
+        return comments;
+
+        /*if (blog.size()!=null) {
+            return null;
+        } else {
+            return blog;
+        }*/
+    }
+
+
     @Override
     public boolean deleteBlog(ObjectId userIdStr) {
         return delete(userIdStr);

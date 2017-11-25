@@ -1,11 +1,10 @@
-package demo;
+package blog;
 
 import global.exceptions.CustomException;
-import org.bson.types.ObjectId;
-import user.UserModel;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Date;
 import java.util.List;
 
 @Singleton
@@ -21,19 +20,36 @@ public class BlogService {
     public BlogModel viewBlog(String userIdStr) {
         return repository.viewBlog(userIdStr);
     }
+
     public List<BlogModel> viewBlogs(String userIdStr) {
         return repository.viewBlogs(userIdStr);
+    }
+
+    public List<String> viewComments(String topic) {
+        return repository.viewComments(topic);
     }
 
     public BlogModel createBlog(blogRequestForm blogForm) {
         final BlogModel newBlog = new BlogModel();
         newBlog.setUserId(blogForm.userId);
-        newBlog.setTitle(blogForm.getTitle());
+        newBlog.setTopic(blogForm.getTopic());
         newBlog.setBlogDesc(blogForm.getBlogDesc());
-       // newBlog.setCommnets(blogForm.getComments());
+        // newBlog.setCommnets(blogForm.getComments());
         newBlog.setLike(0);
         return repository.createBlog(newBlog);
     }
+
+    public BlogModel postComments(CommentsRequestForm commentsForm) {
+        final BlogModel newCommetns = new BlogModel();
+        newCommetns.setTopic(commentsForm.getTopic());
+        newCommetns.setPostedId(commentsForm.getPostedId());
+        newCommetns.setPosted(new Date());
+        newCommetns.setComments(commentsForm.getComments());
+
+        return repository.postComments(newCommetns);
+    }
+
+
 
     boolean deleteBlog(String userIdStr) {
         boolean status = false;
@@ -55,7 +71,7 @@ public class BlogService {
         }
 
         user.setBlogDesc(blogForm.getBlogDesc());
-        user.setTitle(blogForm.getTitle());
+        user.setTopic(blogForm.getTopic());
         repository.updateBlog(user);
         return user;
     }

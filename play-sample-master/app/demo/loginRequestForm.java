@@ -11,4 +11,5 @@ public class loginRequestForm {
     public String password;
     @Constraints.Email
     public String email;
+
 }

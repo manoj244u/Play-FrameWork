@@ -1,4 +1,4 @@
-package demo;
+package blog;
 
 import com.google.common.collect.ImmutableMap;
 import global.common.BaseController;
@@ -50,6 +50,7 @@ public class BlogController extends BaseController {
             return failure(e.getMessage());
         }
     }
+
     public Result viewBlogs(String userIdStr) {
         try {
 
@@ -84,6 +85,37 @@ public class BlogController extends BaseController {
             final blogRequestForm blogForm = blogModelForm.get();
             final BlogModel user = this.blogservice.updateBlog(userIdStr, blogForm);
             return user != null ? success("successfully updated Blog-Post") : failure("failed to update Blog-Post");
+        } catch (CustomException e) {
+            return failure(e.getMessage());
+        }
+    }
+
+    @BodyParser.Of(BodyParser.Json.class)
+    public Result postComments()
+    {
+        try {
+            final Form<CommentsRequestForm> commetnsModelFrom = formFactory.form(CommentsRequestForm.class).bindFromRequest();
+            if (commetnsModelFrom.hasErrors()) {
+                return failure(buildValidationErrorMessage(commetnsModelFrom.allErrors()));
+            }
+
+            final CommentsRequestForm commentsForm=commetnsModelFrom.get();
+            final BlogModel blog = this.blogservice.postComments(commentsForm);
+            return blog != null ? ok("Comments created successfully") : failure("Failed to create Comments");
+
+        } catch (
+                CustomException e)
+
+        {
+            return failure(e.getMessage());
+        }
+
+    }
+    public Result viewComments(String topic) {
+        try {
+
+            List<String> comments = blogservice.viewComments(topic);
+            return comments != null ? success(ImmutableMap.of("Blog-post Commetns",comments)) : failure("Failed to Fetch Comments");
         } catch (CustomException e) {
             return failure(e.getMessage());
         }
