@@ -1,5 +1,10 @@
 package blog;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableMap;
 import global.common.BaseController;
 import global.exceptions.CustomException;
@@ -7,9 +12,8 @@ import play.data.Form;
 import play.mvc.BodyParser;
 import play.mvc.Result;
 
-import java.util.*;
-
 import javax.inject.Inject;
+import java.util.List;
 
 public class BlogController extends BaseController {
     private final BlogService blogservice;
@@ -90,6 +94,7 @@ public class BlogController extends BaseController {
         }
     }
 
+
     @BodyParser.Of(BodyParser.Json.class)
     public Result postComments()
     {
@@ -111,14 +116,71 @@ public class BlogController extends BaseController {
         }
 
     }
+    @BodyParser.Of(BodyParser.Json.class)
+    public Result postLikes()
+    {
+        try {
+            final Form<CommentsRequestForm> commetnsModelFrom = formFactory.form(CommentsRequestForm.class).bindFromRequest();
+            if (commetnsModelFrom.hasErrors()) {
+                return failure(buildValidationErrorMessage(commetnsModelFrom.allErrors()));
+            }
+
+            final CommentsRequestForm commentsForm=commetnsModelFrom.get();
+            final BlogModel blog = this.blogservice.postLikes(commentsForm);
+            return blog != null ? ok("Comments created successfully") : failure("Failed to create Comments");
+
+        } catch (
+                CustomException e)
+
+        {
+            return failure(e.getMessage());
+        }
+
+    }
     public Result viewComments(String topic) {
         try {
 
-            List<String> comments = blogservice.viewComments(topic);
-            return comments != null ? success(ImmutableMap.of("Blog-post Commetns",comments)) : failure("Failed to Fetch Comments");
+            List<BlogModel> comments = blogservice.viewComments(topic);
+            ObjectMapper mapper1 = new ObjectMapper();
+            JsonNode childNode1;
+            ArrayNode obj = mapper1.createArrayNode();
+            for (BlogModel b : comments) {
+                 childNode1 = mapper1.createObjectNode();
+                if (b.getComments() != null) {
+                    ((ObjectNode) childNode1).put("post", b.getTopic());
+                    ((ObjectNode) childNode1).put("comments", b.getComments());
+                    ((ObjectNode) childNode1).put("like", b.getLike());
+                    ((ArrayNode)obj).add(childNode1);
+                 }
+            }
+               return comments != null ? success(obj) : failure("Failed to Fetch Comments");
         } catch (CustomException e) {
+            return failure(e.getMessage());
+        }
+    }
+    public Result view_post_by_maxLikes(String topic) {
+        try {
+
+            List<BlogModel> comments = blogservice.view_post_by_maxLikes(topic);
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode childNode3;
+            ArrayNode obj = mapper.createArrayNode();
+
+            for (BlogModel b : comments) {
+                if (b.getBlogDesc() != null) {
+                   childNode3 =  mapper.createObjectNode();
+                    ((ObjectNode) childNode3).put("topic", b.getTopic());
+                    ((ObjectNode) childNode3).put("desc", b.getBlogDesc());
+                    ((ArrayNode)obj).add(childNode3);
+
+                }
+            }
+            return comments != null ? success(obj) : failure("Failed to Fetch Comments");
+        }catch (CustomException e) {
             return failure(e.getMessage());
         }
     }
 
 }
+
+

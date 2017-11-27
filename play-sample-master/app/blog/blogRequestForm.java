@@ -11,10 +11,12 @@ import java.util.List;
 @Getter
 @Setter
 public class blogRequestForm {
-   public String userId;
+    @Constraints.Required
+    public String userId;
+    public String postedId;
     public List<String> comments = new ArrayList<String>();
     @Constraints.Required
     public String topic;
     public String blogDesc;
-    public int like;
+    public String like;
 }

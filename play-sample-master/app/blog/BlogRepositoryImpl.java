@@ -24,14 +24,15 @@ public class BlogRepositoryImpl extends BaseRepository<BlogModel> implements Blo
     }
 
     @Override
-    public BlogModel postComments(BlogModel newCommetns) {
+    public BlogModel postComments(BlogModel newComments) {
         BlogModel blog = query()
                 .field(BlogModel.Fields.topic.name())
-                .equal(newCommetns.getTopic())
+                .equal(newComments.getTopic())
                 .get();
+
         if (blog != null) {
-        create(newCommetns);
-        return newCommetns;
+        create(newComments);
+        return newComments;
     }
         return null;
 
@@ -66,24 +67,19 @@ public class BlogRepositoryImpl extends BaseRepository<BlogModel> implements Blo
         }*/
     }
     @Override
-    public List<String> viewComments(String topic) {
+    public List<BlogModel> viewComments(String topic) {
 
-        List<BlogModel> model= query()
+       return query()
                 .field(BlogModel.Fields.topic.name())
                 .equal(topic)
                 .asList();
-         List<String> comments=new ArrayList<String>();
-        for(BlogModel b1 : model){
-            comments.add(b1.getComments());
 
-        }
-        return comments;
-
-        /*if (blog.size()!=null) {
-            return null;
-        } else {
-            return blog;
-        }*/
+    }
+    @Override
+    public List<BlogModel> view_post_by_maxLikes(String topic) {
+       return query()
+                .order("like")
+                .asList();
     }
 
 
@@ -93,8 +89,28 @@ public class BlogRepositoryImpl extends BaseRepository<BlogModel> implements Blo
     }
 
     @Override
+    public void updateComments(BlogModel user)
+    {
+        update(user);
+    }
+    @Override
+    public void updateLikes(BlogModel user)
+    {
+        update(user);
+    }
+    @Override
     public void updateBlog(BlogModel user)
     {
         update(user);
+    }
+
+    @Override
+    public BlogModel checkUser(String userIdStr) {
+
+        return query()
+                .field(BlogModel.Fields.postedId.name())
+                .equal(userIdStr)
+                .get();
+
     }
 }

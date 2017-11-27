@@ -6,6 +6,8 @@ DELETE  /deleteblog/:userIdStr              blog.BlogController.deleteBlog(userI
 GET     /view/:userIdStr                    blog.BlogController.viewBlog(userIdStr: String)
 PUT     /update/:userIdStr                  blog.BlogController.updateBlog(userIdStr: String)
 POST    /comments                           blog.BlogController.postComments()
+POST    /like                               blog.BlogController.postLikes()
+GET    /maxlike/:topic                     blog.BlogController.view_post_by_maxLikes(topic: String)
 GET     /viewComments/:topic                blog.BlogController.viewComments(topic: String)
 #POST    /commnet/:userIdStr
 # GET   /login/:email/:pass                 demo.DemoController.login(email : String, pass : String)

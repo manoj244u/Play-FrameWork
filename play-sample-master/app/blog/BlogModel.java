@@ -15,9 +15,9 @@ import java.util.Date;
     @Setter
 
     public class BlogModel extends BaseModel{
-        private String userId,blogDesc,comments,topic,postedId;
+        private String userId,blogDesc,comments,topic,postedId,like;
        // private List<String> commnets;
-        private int like;
+
         private Date posted;
-        public enum Fields{userId,title,blogDesc,comments,posted,topic,like}
+        public enum Fields{userId,topic,blogDesc,comments,posted,like,postedId}
 }
