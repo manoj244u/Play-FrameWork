@@ -29,8 +29,9 @@ public class BlogService {
     public List<BlogModel> viewComments(String topic) {
         return repository.viewComments(topic);
     }
-    public List<BlogModel> view_post_by_maxLikes(String topic) {
-        return repository.view_post_by_maxLikes(topic);
+
+    public List<BlogModel> view_post_by_maxLikes() {
+        return repository.view_post_by_maxLikes();
     }
 
     public BlogModel createBlog(blogRequestForm blogForm) {
@@ -38,18 +39,13 @@ public class BlogService {
         newBlog.setUserId(blogForm.userId);
         newBlog.setTopic(blogForm.getTopic());
         newBlog.setBlogDesc(blogForm.getBlogDesc());
-        // newBlog.setCommnets(blogForm.getComments());
+        newBlog.setComments("");
         newBlog.setLike("0");
         return repository.createBlog(newBlog);
     }
 
     public BlogModel postComments(CommentsRequestForm commentsForm) {
-        BlogModel check = repository.checkUser(commentsForm.getPostedId());
-       /* */
-        /*newComments.setLike(((commentsForm.getLike()).toLowerCase().equalsIgnoreCase("yes")
-                ? "1" : "0"));*/
-
-        // newComments.setComments(commentsForm.getComments());
+        BlogModel check = repository.checkUser(commentsForm.getPostedId(),commentsForm.getTopic());
         if (check != null) {
             check.setComments(commentsForm.getComments());
             repository.updateComments(check);
@@ -68,24 +64,37 @@ public class BlogService {
     }
 
     public BlogModel postLikes(CommentsRequestForm commentsForm) {
-        BlogModel check = repository.checkUser(commentsForm.getPostedId());
-        if (check != null) {
-            check.setLike("1");
-            repository.updateLikes(check);
-            return check;
-        }
-
-      else {
+        BlogModel check = repository.checkUser(commentsForm.getPostedId(),commentsForm.getTopic());
+        List<BlogModel> check1 = repository.checkBlog(commentsForm.getTopic());
+        if (check != null ) {
+            if(check.getLike().equals("0")) {
+                check.setLike("1");
+                updateBlog(check1, commentsForm.getTopic());
+                repository.updateLikes(check);
+                return check;
+            }
+            return null;
+        } else {
             final BlogModel newComments = new BlogModel();
             newComments.setTopic(commentsForm.getTopic());
             newComments.setPostedId(commentsForm.getPostedId());
             newComments.setPosted(new Date());
             newComments.setLike("1");
             newComments.setComments("");
+            updateBlog(check1,commentsForm.getTopic());
             return repository.postComments(newComments);
         }
     }
-
+     public BlogModel updateBlog(List<BlogModel> check1, String topic)
+      {
+        for(BlogModel b: check1) {
+        if (!b.getUserId().isEmpty() && b.getTopic().equalsIgnoreCase(topic)) {
+            b.setLike(String.valueOf(Integer.valueOf(b.getLike()) + 1));
+            repository.updateLikes(b);
+            return b;
+        }
+    }return null;
+}
 
     boolean deleteBlog(String userIdStr) {
         boolean status = false;

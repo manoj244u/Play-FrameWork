@@ -31,9 +31,9 @@ public class BlogRepositoryImpl extends BaseRepository<BlogModel> implements Blo
                 .get();
 
         if (blog != null) {
-        create(newComments);
-        return newComments;
-    }
+            create(newComments);
+            return newComments;
+        }
         return null;
 
     }
@@ -52,6 +52,7 @@ public class BlogRepositoryImpl extends BaseRepository<BlogModel> implements Blo
             return blog;
         }*/
     }
+
     @Override
     public List<BlogModel> viewBlogs(String userIdStr) {
 
@@ -66,18 +67,20 @@ public class BlogRepositoryImpl extends BaseRepository<BlogModel> implements Blo
             return blog;
         }*/
     }
+
     @Override
     public List<BlogModel> viewComments(String topic) {
 
-       return query()
+        return query()
                 .field(BlogModel.Fields.topic.name())
                 .equal(topic)
                 .asList();
 
     }
+
     @Override
-    public List<BlogModel> view_post_by_maxLikes(String topic) {
-       return query()
+    public List<BlogModel> view_post_by_maxLikes() {
+        return query()
                 .order("like")
                 .asList();
     }
@@ -89,28 +92,38 @@ public class BlogRepositoryImpl extends BaseRepository<BlogModel> implements Blo
     }
 
     @Override
-    public void updateComments(BlogModel user)
-    {
-        update(user);
-    }
-    @Override
-    public void updateLikes(BlogModel user)
-    {
-        update(user);
-    }
-    @Override
-    public void updateBlog(BlogModel user)
-    {
+    public void updateComments(BlogModel user) {
         update(user);
     }
 
     @Override
-    public BlogModel checkUser(String userIdStr) {
+    public void updateLikes(BlogModel user) {
+        update(user);
+    }
+
+    @Override
+    public void updateBlog(BlogModel user) {
+        update(user);
+    }
+
+    @Override
+    public BlogModel checkUser(String userIdStr, String topic) {
 
         return query()
                 .field(BlogModel.Fields.postedId.name())
                 .equal(userIdStr)
+                .field(BlogModel.Fields.topic.name())
+                .equal(topic)
                 .get();
+
+    }
+
+    @Override
+    public List<BlogModel> checkBlog(String topic) {
+        return query()
+                .field(BlogModel.Fields.topic.name())
+                .equal(topic)
+                .asList();
 
     }
 }

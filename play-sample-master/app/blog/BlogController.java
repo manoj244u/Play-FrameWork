@@ -158,10 +158,10 @@ public class BlogController extends BaseController {
             return failure(e.getMessage());
         }
     }
-    public Result view_post_by_maxLikes(String topic) {
+    public Result view_post_by_maxLikes() {
         try {
 
-            List<BlogModel> comments = blogservice.view_post_by_maxLikes(topic);
+            List<BlogModel> comments = blogservice.view_post_by_maxLikes();
             ObjectMapper mapper = new ObjectMapper();
             JsonNode childNode3;
             ArrayNode obj = mapper.createArrayNode();
@@ -171,6 +171,7 @@ public class BlogController extends BaseController {
                    childNode3 =  mapper.createObjectNode();
                     ((ObjectNode) childNode3).put("topic", b.getTopic());
                     ((ObjectNode) childNode3).put("desc", b.getBlogDesc());
+                    ((ObjectNode) childNode3).put("Likes", b.getLike());
                     ((ArrayNode)obj).add(childNode3);
 
                 }
