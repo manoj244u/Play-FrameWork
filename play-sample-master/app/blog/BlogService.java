@@ -30,6 +30,11 @@ public class BlogService {
         return repository.viewComments(topic);
     }
 
+    public List<BlogModel> viewCommentsByserIds(String postedIds) {
+        System.out.print(" size  " +repository.viewCommentsByserIds(postedIds).size());
+        return repository.viewCommentsByserIds(postedIds);
+    }
+
     public List<BlogModel> view_post_by_maxLikes() {
         return repository.view_post_by_maxLikes();
     }

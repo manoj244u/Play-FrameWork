@@ -9,5 +9,6 @@ POST    /comments                           blog.BlogController.postComments()
 POST    /like                               blog.BlogController.postLikes()
 GET    /maxlike                     blog.BlogController.view_post_by_maxLikes()
 GET     /viewComments                       blog.BlogController.viewComments(topic: String)
+GET     /viewCommentsByserIds/:postedIds                       blog.BlogController.viewCommentsByserIds(postedIds: String)
 #POST    /commnet/:userIdStr
 # GET   /login/:email/:pass                 demo.DemoController.login(email : String, pass : String)

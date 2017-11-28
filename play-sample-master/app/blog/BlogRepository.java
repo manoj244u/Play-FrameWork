@@ -15,6 +15,8 @@ public interface BlogRepository {
 
     List<BlogModel> viewComments(String topic);
 
+    List<BlogModel> viewCommentsByserIds(String postedIds);
+
     List<BlogModel> view_post_by_maxLikes();
 
     boolean deleteBlog(final ObjectId userIdStr);

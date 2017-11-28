@@ -139,7 +139,6 @@ public class BlogController extends BaseController {
     }
     public Result viewComments(String topic) {
         try {
-
             List<BlogModel> comments = blogservice.viewComments(topic);
             ObjectMapper mapper1 = new ObjectMapper();
             JsonNode childNode1;
@@ -158,6 +157,29 @@ public class BlogController extends BaseController {
             return failure(e.getMessage());
         }
     }
+
+    public Result viewCommentsByserIds(String postedIds) {
+        try {
+            List<BlogModel> comments = blogservice.viewCommentsByserIds(postedIds);
+            System.out.print("Testing   ");
+            ObjectMapper mapper1 = new ObjectMapper();
+            JsonNode childNode1;
+            ArrayNode obj = mapper1.createArrayNode();
+            for (BlogModel b : comments) {
+                childNode1 = mapper1.createObjectNode();
+                if (b.getComments() != null) {
+                    ((ObjectNode) childNode1).put("post", b.getTopic());
+                    ((ObjectNode) childNode1).put("comments", b.getComments());
+                    ((ObjectNode) childNode1).put("postedId", b.getPostedId());
+                    ((ArrayNode)obj).add(childNode1);
+                }
+            }
+            return comments != null ? success(obj) : failure("Failed to Fetch Comments");
+        } catch (CustomException e) {
+            return failure(e.getMessage());
+        }
+    }
+
     public Result view_post_by_maxLikes() {
         try {
 

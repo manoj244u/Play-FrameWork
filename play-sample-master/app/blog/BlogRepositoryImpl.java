@@ -3,6 +3,7 @@ package blog;
 import global.common.BaseRepository;
 import global.configuration.db.mongodb.MongoDBConnection;
 import org.bson.types.ObjectId;
+import play.mvc.Http;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -77,6 +78,17 @@ public class BlogRepositoryImpl extends BaseRepository<BlogModel> implements Blo
                 .asList();
 
     }
+
+    @Override
+    public List<BlogModel> viewCommentsByserIds(String s1) {
+        List<String> postedIdArray = Arrays.asList(s1.split(","));
+        return  query().field(BlogModel.Fields.postedId.name())
+                    .in(postedIdArray)
+                    .asList();
+
+
+    }
+
 
     @Override
     public List<BlogModel> view_post_by_maxLikes() {
