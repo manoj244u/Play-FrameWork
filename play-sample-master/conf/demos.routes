@@ -7,8 +7,9 @@ GET     /view/:userIdStr                    blog.BlogController.viewBlog(userIdS
 PUT     /update/:userIdStr                  blog.BlogController.updateBlog(userIdStr: String)
 POST    /comments                           blog.BlogController.postComments()
 POST    /like                               blog.BlogController.postLikes()
-GET    /maxlike                     blog.BlogController.view_post_by_maxLikes()
+GET     /maxlike                            blog.BlogController.view_post_by_maxLikes()
 GET     /viewComments                       blog.BlogController.viewComments(topic: String)
-GET     /viewCommentsByserIds/:postedIds                       blog.BlogController.viewCommentsByserIds(postedIds: String)
-#POST    /commnet/:userIdStr
+GET     /viewCommentsByserIds/:postedIds    blog.BlogController.viewCommentsByserIds(postedIds: String)
+GET     /logout/:sessionToken               demo.DemoController.logoutUser(sessionToken: String)
+#POST   /commnet/:userIdStr
 # GET   /login/:email/:pass                 demo.DemoController.login(email : String, pass : String)
