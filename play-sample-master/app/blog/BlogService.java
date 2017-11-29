@@ -119,7 +119,7 @@ public class BlogService {
     public BlogModel updateBlog(String userIdStr, BlogRequestForm blogForm) {
         final BlogModel user = repository.viewBlog(userIdStr);
         if (user == null) {
-            throw new CustomException("No user exists for given user ID");
+            throw new CustomException("No user exists for given user_id");
         }
 
         user.setBlogDesc(blogForm.getBlogDesc());
@@ -131,7 +131,7 @@ public class BlogService {
     public BlogModel updateLikes(String userIdStr, CommentsRequestForm blogForm) {
         final BlogModel user = repository.viewBlog(userIdStr);
         if (user == null) {
-            throw new CustomException("No user exists for given user ID");
+            throw new CustomException("No user exists for given user_id");
         }
         user.setLike(1);
         repository.updateBlog(user);
@@ -141,7 +141,7 @@ public class BlogService {
     public BlogModel updateComments(String userIdStr, CommentsRequestForm blogForm) {
         final BlogModel user = repository.viewBlog(userIdStr);
         if (user == null) {
-            throw new CustomException("No user exists for given user ID");
+            throw new CustomException("No user exists for given user_id");
         }
         user.setComments(blogForm.getComments());
         repository.updateBlog(user);
