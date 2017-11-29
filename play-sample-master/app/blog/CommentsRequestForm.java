@@ -15,7 +15,7 @@ public class CommentsRequestForm {
     @Constraints.Required
     public String topic;
     public String comments;
-    public String like;
+    public long like;
     public Date posted;
 
 }
