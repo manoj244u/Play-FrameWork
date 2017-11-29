@@ -31,7 +31,7 @@ public class BlogService {
     }
 
     public List<BlogModel> viewCommentsByserIds(String postedIds) {
-        System.out.print(" size  " +repository.viewCommentsByserIds(postedIds).size());
+        System.out.print(" size  " + repository.viewCommentsByserIds(postedIds).size());
         return repository.viewCommentsByserIds(postedIds);
     }
 
@@ -39,18 +39,18 @@ public class BlogService {
         return repository.view_post_by_maxLikes();
     }
 
-    public BlogModel createBlog(blogRequestForm blogForm) {
+    public BlogModel createBlog(BlogRequestForm blogForm) {
         final BlogModel newBlog = new BlogModel();
         newBlog.setUserId(blogForm.userId);
         newBlog.setTopic(blogForm.getTopic());
         newBlog.setBlogDesc(blogForm.getBlogDesc());
         newBlog.setComments("");
-        newBlog.setLike("0");
+        newBlog.setLike(0);
         return repository.createBlog(newBlog);
     }
 
     public BlogModel postComments(CommentsRequestForm commentsForm) {
-        BlogModel check = repository.checkUser(commentsForm.getPostedId(),commentsForm.getTopic());
+        BlogModel check = repository.checkUser(commentsForm.getPostedId(), commentsForm.getTopic());
         if (check != null) {
             check.setComments(commentsForm.getComments());
             repository.updateComments(check);
@@ -60,7 +60,7 @@ public class BlogService {
 
             newComments.setTopic(commentsForm.getTopic());
             newComments.setPostedId(commentsForm.getPostedId());
-            newComments.setLike("");
+            newComments.setLike(0);
             newComments.setPosted(new Date());
             newComments.setComments(commentsForm.getComments());
             repository.postComments(newComments);
@@ -69,37 +69,39 @@ public class BlogService {
     }
 
     public BlogModel postLikes(CommentsRequestForm commentsForm) {
-        BlogModel check = repository.checkUser(commentsForm.getPostedId(),commentsForm.getTopic());
+        BlogModel check = repository.checkUser(commentsForm.getPostedId(), commentsForm.getTopic());
         List<BlogModel> check1 = repository.checkBlog(commentsForm.getTopic());
-        if (check != null ) {
-            if(check.getLike().equals("0")) {
-                check.setLike("1");
+        if (check != null) {
+            if (check.getLike() == (0)) {
+                check.setLike(1);
                 updateBlog(check1, commentsForm.getTopic());
                 repository.updateLikes(check);
                 return check;
             }
-            return null;
+            throw new CustomException("Only one Like per user is accepted ");
+
         } else {
-            final BlogModel newComments = new BlogModel();
-            newComments.setTopic(commentsForm.getTopic());
-            newComments.setPostedId(commentsForm.getPostedId());
-            newComments.setPosted(new Date());
-            newComments.setLike("1");
-            newComments.setComments("");
-            updateBlog(check1,commentsForm.getTopic());
-            return repository.postComments(newComments);
+            final BlogModel blog = new BlogModel();
+            blog.setTopic(commentsForm.getTopic());
+            blog.setPostedId(commentsForm.getPostedId());
+            blog.setPosted(new Date());
+            blog.setLike(1);
+            blog.setComments("");
+            updateBlog(check1, blog.getTopic());
+            return repository.postComments(blog);
         }
     }
-     public BlogModel updateBlog(List<BlogModel> check1, String topic)
-      {
-        for(BlogModel b: check1) {
-        if (!b.getUserId().isEmpty() && b.getTopic().equalsIgnoreCase(topic)) {
-            b.setLike(String.valueOf(Integer.valueOf(b.getLike()) + 1));
-            repository.updateLikes(b);
-            return b;
+
+    public BlogModel updateBlog(List<BlogModel> check1, String topic) {
+        for (BlogModel b : check1) {
+            if (!b.getUserId().isEmpty() && b.getTopic().equalsIgnoreCase(topic)) {
+                b.setLike((b.getLike() + 1));
+                repository.updateLikes(b);
+                return b;
+            }
         }
-    }return null;
-}
+        throw new CustomException("Failed to update the Blogs");
+    }
 
     boolean deleteBlog(String userIdStr) {
         boolean status = false;
@@ -114,7 +116,7 @@ public class BlogService {
 
     }
 
-    public BlogModel updateBlog(String userIdStr, blogRequestForm blogForm) {
+    public BlogModel updateBlog(String userIdStr, BlogRequestForm blogForm) {
         final BlogModel user = repository.viewBlog(userIdStr);
         if (user == null) {
             throw new CustomException("No user exists for given user ID");
@@ -131,7 +133,7 @@ public class BlogService {
         if (user == null) {
             throw new CustomException("No user exists for given user ID");
         }
-        user.setLike("1");
+        user.setLike(1);
         repository.updateBlog(user);
         return user;
     }

@@ -2,6 +2,7 @@ package blog;
 
 import global.common.BaseRepository;
 import global.configuration.db.mongodb.MongoDBConnection;
+import global.exceptions.CustomException;
 import org.bson.types.ObjectId;
 import play.mvc.Http;
 
@@ -25,17 +26,17 @@ public class BlogRepositoryImpl extends BaseRepository<BlogModel> implements Blo
     }
 
     @Override
-    public BlogModel postComments(BlogModel newComments) {
-        BlogModel blog = query()
+    public BlogModel postComments(BlogModel blog) {
+        BlogModel check = query()
                 .field(BlogModel.Fields.topic.name())
-                .equal(newComments.getTopic())
+                .equal(blog.getTopic())
                 .get();
 
-        if (blog != null) {
-            create(newComments);
-            return newComments;
+        if (check != null) {
+            create(blog);
+            return blog;
         }
-        return null;
+         throw new CustomException("Only one Comment per user is accepted ");
 
     }
 

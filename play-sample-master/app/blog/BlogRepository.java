@@ -7,7 +7,7 @@ import java.util.List;
 public interface BlogRepository {
     BlogModel createBlog(BlogModel newBlog);
 
-    BlogModel postComments(BlogModel newCommetns);
+    BlogModel postComments(BlogModel blog);
 
     BlogModel viewBlog(String userIdStr);
 

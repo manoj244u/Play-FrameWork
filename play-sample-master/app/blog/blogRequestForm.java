@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class blogRequestForm {
+public class BlogRequestForm {
     @Constraints.Required
     public String userId;
     public String postedId;
@@ -18,5 +18,5 @@ public class blogRequestForm {
     @Constraints.Required
     public String topic;
     public String blogDesc;
-    public String like;
+    public long like;
 }

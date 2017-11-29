@@ -28,12 +28,12 @@ public class BlogController extends BaseController {
     public Result createBlog() {
         if (isSessionValid()) {
             try {
-                final Form<blogRequestForm> blogModelFrom = formFactory.form(blogRequestForm.class).bindFromRequest();
+                final Form<BlogRequestForm> blogModelFrom = formFactory.form(BlogRequestForm.class).bindFromRequest();
                 if (blogModelFrom.hasErrors()) {
                     return failure(buildValidationErrorMessage(blogModelFrom.allErrors()));
                 }
 
-                final blogRequestForm blogForm = blogModelFrom.get();
+                final BlogRequestForm blogForm = blogModelFrom.get();
                 final BlogModel blog = this.blogservice.createBlog(blogForm);
                 return blog != null ? ok("Blog created successfully") : failure("Failed to create BlogPost");
 
@@ -90,7 +90,7 @@ public class BlogController extends BaseController {
     public Result updateBlog(String userIdStr) {
         if (isSessionValid()) {
             try {
-                final Form<blogRequestForm> blogModelForm = formFactory.form(blogRequestForm.class).bindFromRequest();
+                final Form<BlogRequestForm> blogModelForm = formFactory.form(BlogRequestForm.class).bindFromRequest();
                 if (blogModelForm.hasErrors()) {
                     return failure(buildValidationErrorMessage(blogModelForm.allErrors()));
                 }
@@ -99,7 +99,7 @@ public class BlogController extends BaseController {
                 return failure("Invalid User ID type");
             }*/
 
-                final blogRequestForm blogForm = blogModelForm.get();
+                final BlogRequestForm blogForm = blogModelForm.get();
                 final BlogModel user = this.blogservice.updateBlog(userIdStr, blogForm);
                 return user != null ? success("successfully updated Blog-Post") : failure("failed to update Blog-Post");
             } catch (CustomException e) {
